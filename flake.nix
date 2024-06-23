@@ -14,8 +14,8 @@
     in
       with pkgs; {
         devShells.default = mkShell {
-          packages = [dotnetCorePackages.sdk_8_0];
-          DOTNET_ROOT = "${dotnetCorePackages.sdk_8_0}";
+          packages = [dotnetCorePackages.sdk_9_0];
+          DOTNET_ROOT = "${dotnetCorePackages.sdk_9_0}";
         };
       });
 }
