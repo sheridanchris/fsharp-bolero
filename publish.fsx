@@ -4,7 +4,7 @@ open Fun.Build
 open System.IO
 open System
 
-let nupkg = "FSharp.Compiler.Service.Bolero.nupkg"
+let nupkg = "FSharpTour.FCS.nupkg"
 
 let nugetPushCommand (apiKey: string) : System.FormattableString =
     $"dotnet nuget push {nupkg} -s https://api.nuget.org/v3/index.json --skip-duplicate -k {apiKey}"

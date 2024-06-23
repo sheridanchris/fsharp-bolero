@@ -37,8 +37,8 @@
 
   <PropertyGroup>
     <Version>0.0.1</Version>
-    <PackageId>FSharp.Compiler.Service.Bolero</PackageId>
-    <NuspecFile>FSharp.Compiler.Service.Bolero.nuspec</NuspecFile>
+    <PackageId>FSharpTour.FCS</PackageId>
+    <NuspecFile>FSharp.Compiler.Service.nuspec</NuspecFile>
     <IsPackable>true</IsPackable>
   </PropertyGroup>
 
