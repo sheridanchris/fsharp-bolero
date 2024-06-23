@@ -1,39 +1,26 @@
-#r "nuget: Fun.Build, 0.3.6"
+#r "nuget: Fun.Build"
 
 open Fun.Build
-open System.IO
-open System
 
-let nupkg = "FSharpTour.FCS.nupkg"
+let options =
+    {| NugetAPIKey = EnvArg.Create("NUGET_API_KEY", description = "Nuget api key") |}
 
-let nugetPushCommand (apiKey: string) : System.FormattableString =
-    $"dotnet nuget push {nupkg} -s https://api.nuget.org/v3/index.json --skip-duplicate -k {apiKey}"
+pipeline "packages" {
+    description "Build and deploy to nuget"
 
-pipeline "Publish" {
-    description "Publish to NuGet"
+    stage "Build packages" { run "dotnet pack -c src/Compiler -o ." }
 
-    whenAll {
-        branch "main"
+    stage "Publish packages to nuget" {
+        whenBranch "main"
+        whenEnvVar options.NugetAPIKey
+        whenEnvVar "GITHUB_ENV" "" "Only push packages in github action"
 
-        whenAny {
-            envVar "NUGET_API_KEY"
-            cmdArg "NUGET_API_KEY"
-        }
-    }
-
-    stage "Pack" { run "dotnet pack -c Release ./src/Compiler -o ." }
-
-    stage "Publish" {
         run (fun ctx ->
-            let key = ctx.GetCmdArgOrEnvVar "NUGET_API_KEY"
-            runSensitive (nugetPushCommand key))
+            let key = ctx.GetEnvVar options.NugetAPIKey.Name
+
+            ctx.RunSensitiveCommand
+                $"dotnet nuget push FSharpTour.FCS.nupkg -s https://api.nuget.org/v3/index.json --skip-duplicate -k {key}")
     }
 
-    post
-        [ stage "Post publish" {
-              whenNot { envVar "GITHUB_ACTION" }
-
-              run (fun _ ->
-                  File.Delete nupkg)
-          } ]
+    runIfOnlySpecified
 }

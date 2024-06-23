@@ -13,6 +13,6 @@ jobs:
         global-json-file: global.json
 
     - name: Build & Publish
-      run: dotnet fsi ./publish.fsx
+      run: dotnet fsi ./publish.fsx -- -p packages
       env:
         NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
