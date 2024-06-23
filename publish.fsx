@@ -8,7 +8,7 @@ let options =
 pipeline "packages" {
     description "Build and deploy to nuget"
 
-    stage "Build packages" { run "dotnet pack -c src/Compiler -o ." }
+    stage "Build packages" { run "dotnet pack -c src/Compiler/FSharp.Compiler.Service.fsproj -o ." }
 
     stage "Publish packages to nuget" {
         whenBranch "main"
